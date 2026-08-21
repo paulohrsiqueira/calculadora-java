@@ -11,6 +11,10 @@ import java.awt.BorderLayout;
 
 public class Calculadora {
 
+    static double numero1;
+    static double numero2;
+    static String operacao;
+
     public static void main(String[] args) {
 
         JFrame janela = new JFrame();
@@ -46,9 +50,15 @@ public class Calculadora {
                     
                     String txtAtual = visor.getText();
                     String txtProx = btnClicado.getText();
+                    
+                    if(txtProx.equals("+")){
+                        numero1 = Double.parseDouble(txtAtual);
+                        operacao = txtProx;
+                        visor.setText("");
+                    } else{
 
                     visor.setText(txtAtual + txtProx);
-                }
+                }}
             });
 
 
