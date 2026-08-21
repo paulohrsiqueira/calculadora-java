@@ -55,7 +55,14 @@ public class Calculadora {
                         numero1 = Double.parseDouble(txtAtual);
                         operacao = txtProx;
                         visor.setText("");
-                    } else{
+                    }else if (txtProx.equals("=")) {
+
+                        numero2 = Double.parseDouble(txtAtual);
+
+                        double resultado = numero1 + numero2;
+
+                        visor.setText(String.valueOf(resultado));
+                    }else{
 
                     visor.setText(txtAtual + txtProx);
                 }}
