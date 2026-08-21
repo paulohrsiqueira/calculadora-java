@@ -51,15 +51,27 @@ public class Calculadora {
                     String txtAtual = visor.getText();
                     String txtProx = btnClicado.getText();
                     
-                    if(txtProx.equals("+")){
+                    if(txtProx.equals("+") 
+                        || txtProx.equals("-") 
+                        || txtProx.equals("×") 
+                        || txtProx.equals("÷")){
                         numero1 = Double.parseDouble(txtAtual);
                         operacao = txtProx;
                         visor.setText("");
                     }else if (txtProx.equals("=")) {
 
                         numero2 = Double.parseDouble(txtAtual);
+                        double resultado = 0;
 
-                        double resultado = numero1 + numero2;
+                        if (operacao.equals("+")) {
+                            resultado = numero1 + numero2;
+                        } else if (operacao.equals("-")) {
+                            resultado = numero1 - numero2;
+                        } else if (operacao.equals("×")) {
+                            resultado = numero1 * numero2;
+                        } else if (operacao.equals("÷")) {
+                            resultado = numero1 / numero2;
+                        }
 
                         visor.setText(String.valueOf(resultado));
                     }else{
