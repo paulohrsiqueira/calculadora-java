@@ -29,18 +29,19 @@ public class Calculadora {
         JPanel painel = new JPanel();
         
         
-        painel.setLayout(new GridLayout(4, 4));
+        painel.setLayout(new GridLayout(5, 4));
 
         String[] txt = {
             "7", "8", "9", "÷",
             "4", "5", "6", "×",
             "1", "2", "3", "-",
-            "0", ".", "=", "+"
+            "C", "0", ".", "+",
+            "="
         };
 
-        JButton[] btn = new JButton[16];
+        JButton[] btn = new JButton[17];
 
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < 17; i++) {
             btn[i] = new JButton(txt[i]);
 
             btn[i].addActionListener(new ActionListener() {
@@ -50,8 +51,18 @@ public class Calculadora {
                     
                     String txtAtual = visor.getText();
                     String txtProx = btnClicado.getText();
+
+                    //Limpa
+                    if (txtProx.equals("C")) {
+
+                    visor.setText("");
+                    numero1 = 0;
+                    numero2 = 0;
+                    operacao = null;
+                }
                     
-                    if(txtProx.equals("+") 
+                    //Verifica o operador
+                    else if(txtProx.equals("+") 
                         || txtProx.equals("-") 
                         || txtProx.equals("×") 
                         || txtProx.equals("÷")){
@@ -63,6 +74,7 @@ public class Calculadora {
                         numero2 = Double.parseDouble(txtAtual);
                         double resultado = 0;
 
+                        //Calcula o resultado
                         if (operacao.equals("+")) {
                             resultado = numero1 + numero2;
                         } else if (operacao.equals("-")) {
@@ -73,7 +85,12 @@ public class Calculadora {
                             resultado = numero1 / numero2;
                         }
 
-                        visor.setText(String.valueOf(resultado));
+                        //Formata o resultado
+                        if (resultado == (int) resultado) {
+                        visor.setText(String.valueOf((int) resultado));
+                        } else {
+                            visor.setText(String.valueOf(resultado));
+                        }
                     }else{
 
                     visor.setText(txtAtual + txtProx);
