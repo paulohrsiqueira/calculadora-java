@@ -32,16 +32,16 @@ public class Calculadora {
         painel.setLayout(new GridLayout(5, 4));
 
         String[] txt = {
-            "7", "8", "9", "÷",
-            "4", "5", "6", "×",
-            "1", "2", "3", "-",
-            "C", "0", ".", "+",
-            "="
+            "⌫","AC", "%", "÷",
+            "7", "8", "9", "×",
+            "4", "5", "6", "-",
+            "1", "2", "3", "+",
+            "+/-","0", ".","="
         };
 
-        JButton[] btn = new JButton[17];
+        JButton[] btn = new JButton[20];
 
-        for (int i = 0; i < 17; i++) {
+        for (int i = 0; i < 20; i++) {
             btn[i] = new JButton(txt[i]);
 
             btn[i].addActionListener(new ActionListener() {
@@ -52,8 +52,17 @@ public class Calculadora {
                     String txtAtual = visor.getText();
                     String txtProx = btnClicado.getText();
 
+
+                    //Backspace
+                    if (txtProx.equals("⌫")) {
+                        if (txtAtual.length() > 0) {
+                            visor.setText(txtAtual.substring(0, txtAtual.length() - 1));
+                        }
+                    }
+
+
                     //Limpa
-                    if (txtProx.equals("C")) {
+                    else if (txtProx.equals("AC")) {
 
                     visor.setText("");
                     numero1 = 0;
