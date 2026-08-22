@@ -75,6 +75,7 @@ public class Calculadora {
 
                         numero2 = Double.parseDouble(txtAtual);
                         double resultado = 0;
+                        boolean erro = false;
 
 
                     //Calcula o resultado
@@ -85,20 +86,29 @@ public class Calculadora {
                         } else if (operacao.equals("×")) {
                             resultado = numero1 * numero2;
                         } else if (operacao.equals("÷")) {
-                            resultado = numero1 / numero2;
+                            if(numero2 == 0){
+                                erro = true;
+                            }else{
+                            resultado = numero1 / numero2;}
                         }
 
                     //Formata o resultado
-                    if (resultado == (int) resultado) {
+                    if(erro){
+                        visor.setText("ERROR");
+                        }
+                    
+                    else if (resultado == (int) resultado) {
                         visor.setText(String.valueOf((int) resultado));
-                        } else {
+                        } 
+                        
+                    else {
                             visor.setText(String.valueOf(resultado));
                         }
 
                     } 
 
                     else if(txtProx.equals(".")){
-                        
+
                         if(!txtAtual.contains(".")){
                             visor.setText(txtAtual+txtProx);
                         }
