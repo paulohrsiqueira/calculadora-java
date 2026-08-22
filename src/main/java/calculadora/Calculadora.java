@@ -53,16 +53,16 @@ public class Calculadora {
                     String txtProx = btnClicado.getText();
 
 
-                    //Backspace
-                    if (txtProx.equals("⌫")) {
+                //Backspace
+                if (txtProx.equals("⌫")) {
                         if (txtAtual.length() > 0) {
                             visor.setText(txtAtual.substring(0, txtAtual.length() - 1));
                         }
                     }
 
 
-                    //Limpa
-                    else if (txtProx.equals("AC")) {
+                //Limpa
+                else if (txtProx.equals("AC")) {
 
                     visor.setText("");
                     numero1 = 0;
@@ -70,8 +70,8 @@ public class Calculadora {
                     operacao = null;
                 }
                     
-                    //Verifica o operador
-                    else if(txtProx.equals("+") 
+                //Verifica o operador
+                else if(txtProx.equals("+") 
                         || txtProx.equals("-") 
                         || txtProx.equals("×") 
                         || txtProx.equals("÷")){
@@ -79,8 +79,41 @@ public class Calculadora {
                         numero1 = Double.parseDouble(txtAtual);
                         operacao = txtProx;
                         visor.setText("");
+                        }
+                
+                else if(txtProx.equals("%")){
+                   
+                   numero2 = Double.parseDouble(txtAtual);
+                   
+                    
+                    if (operacao == null) {
+                        double resultado = numero2 / 100;
+                        formatarResultado(visor, resultado);
+                    } else {
+                       double porcentagem = numero1 * numero2 / 100;
+                    
+                      if(operacao.equals("+")){
+                      double resultado = numero1 + porcentagem;
+                      formatarResultado(visor, resultado);
+                    } else if (operacao.equals("-")) {
+                        double resultado = numero1 - porcentagem;
+                        formatarResultado(visor, resultado);
+                    } else if (operacao.equals("×")) {
+                        double resultado = numero1 * (numero2 / 100);
+                        formatarResultado(visor, resultado);
+                    } else if (operacao.equals("÷")){
+                        if (numero2 == 0) {
+                                visor.setText("ERROR");
+                            } else {
+                                double resultado = numero1 / (numero2 / 100);
+                                formatarResultado(visor, resultado);
+                            }
+                        }
+                    
+                }
+                }
 
-                    }else if (txtProx.equals("=")) {
+                else if (txtProx.equals("=")) {
 
                         numero2 = Double.parseDouble(txtAtual);
                         double resultado = 0;
@@ -88,7 +121,7 @@ public class Calculadora {
 
 
                     //Calcula o resultado
-                    if (operacao.equals("+")) {
+                if (operacao.equals("+")) {
                             resultado = numero1 + numero2;
                         } else if (operacao.equals("-")) {
                             resultado = numero1 - numero2;
@@ -102,28 +135,22 @@ public class Calculadora {
                         }
 
                     //Formata o resultado
-                    if(erro){
+                    if (erro) {
                         visor.setText("ERROR");
-                        }
-                    
-                    else if (resultado == (int) resultado) {
-                        visor.setText(String.valueOf((int) resultado));
-                        } 
-                        
-                    else {
-                            visor.setText(String.valueOf(resultado));
+                        } else {
+                            formatarResultado(visor, resultado);
                         }
 
                     } 
-
-                    else if(txtProx.equals(".")){
+                    //Verifica se o ponto já foi adicionado
+                else if(txtProx.equals(".")){
 
                         if(!txtAtual.contains(".")){
                             visor.setText(txtAtual+txtProx);
                         }
                     }
 
-                    else{
+                else{
 
                     visor.setText(txtAtual + txtProx);
                 }}
@@ -138,5 +165,12 @@ public class Calculadora {
         janela.add(painel, BorderLayout.CENTER);
 
         janela.setVisible(true);
+    }
+    static void formatarResultado(JTextField visor, double resultado) {
+        if (resultado == (int) resultado) {
+            visor.setText(String.valueOf((int) resultado));
+        } else {
+            visor.setText(String.valueOf(resultado));
+        }
     }
 }
