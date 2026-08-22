@@ -66,16 +66,19 @@ public class Calculadora {
                         || txtProx.equals("-") 
                         || txtProx.equals("×") 
                         || txtProx.equals("÷")){
+                        
                         numero1 = Double.parseDouble(txtAtual);
                         operacao = txtProx;
                         visor.setText("");
+
                     }else if (txtProx.equals("=")) {
 
                         numero2 = Double.parseDouble(txtAtual);
                         double resultado = 0;
 
-                        //Calcula o resultado
-                        if (operacao.equals("+")) {
+
+                    //Calcula o resultado
+                    if (operacao.equals("+")) {
                             resultado = numero1 + numero2;
                         } else if (operacao.equals("-")) {
                             resultado = numero1 - numero2;
@@ -85,13 +88,23 @@ public class Calculadora {
                             resultado = numero1 / numero2;
                         }
 
-                        //Formata o resultado
-                        if (resultado == (int) resultado) {
+                    //Formata o resultado
+                    if (resultado == (int) resultado) {
                         visor.setText(String.valueOf((int) resultado));
                         } else {
                             visor.setText(String.valueOf(resultado));
                         }
-                    }else{
+
+                    } 
+
+                    else if(txtProx.equals(".")){
+                        
+                        if(!txtAtual.contains(".")){
+                            visor.setText(txtAtual+txtProx);
+                        }
+                    }
+
+                    else{
 
                     visor.setText(txtAtual + txtProx);
                 }}
