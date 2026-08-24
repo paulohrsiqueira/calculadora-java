@@ -69,6 +69,11 @@ public class Calculadora {
                     numero2 = 0;
                     operacao = null;
                 }
+
+                else if (txtAtual.isEmpty() && (txtProx.equals("-"))){
+                    visor.setText("-");
+                }
+
                     
                 //Verifica o operador
                 else if(txtProx.equals("+") 
@@ -112,7 +117,17 @@ public class Calculadora {
                     
                 }
                 }
+                else if(txtProx.equals("+/-")){
 
+                    txtAtual = visor.getText();
+
+                    if (!txtAtual.isEmpty()) {
+                        double numero = Double.parseDouble(txtAtual);
+                        numero = numero * -1;
+                        formatarResultado(visor, numero);
+                    }
+
+                }
                 else if (txtProx.equals("=")) {
 
                         numero2 = Double.parseDouble(txtAtual);
