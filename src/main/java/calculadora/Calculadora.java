@@ -81,6 +81,7 @@ public class Calculadora {
             }
 
             btn[i].addActionListener(new ActionListener() {
+
                 @Override
                 public void actionPerformed(ActionEvent e ){
                     JButton btnClicado = (JButton) e.getSource();
@@ -90,42 +91,45 @@ public class Calculadora {
 
 
                 //Backspace
-                if (txtProx.equals("⌫")) {
+                switch (txtProx){
+                case "⌫": 
+                    {
                         if (txtAtual.length() > 0) {
                             visor.setText(txtAtual.substring(0, txtAtual.length() - 1));
                         }
                     }
-
+                    break;
 
                 //Limpa
-                else if (txtProx.equals("AC")) {
+                case "AC":
+                    {
+                        visor.setText("");
+                        numero1 = 0;
+                        numero2 = 0;
+                        operacao = null;
+                    }
+                    break;
 
-                    visor.setText("");
-                    numero1 = 0;
-                    numero2 = 0;
-                    operacao = null;
-                }
 
-                else if (txtAtual.isEmpty() && (txtProx.equals("-"))){
-                    visor.setText("-");
-                }
-
-                    
                 //Verifica o operador
-                else if(txtProx.equals("+") 
-                        || txtProx.equals("-") 
-                        || txtProx.equals("×") 
-                        || txtProx.equals("÷")){
-                        
+                case "+":
+                case "-":
+                case "×":
+                case "÷":
+
+                    if (txtProx.equals("-") && txtAtual.isEmpty()) {
+                        visor.setText("-");
+                    } else {
                         numero1 = Double.parseDouble(txtAtual);
                         operacao = txtProx;
                         visor.setText("");
-                        }
-                
-                else if(txtProx.equals("%")){
-                   
-                   numero2 = Double.parseDouble(txtAtual);
-                   
+                    }
+                break;
+
+                case "%":
+                    {
+                        numero2 = Double.parseDouble(txtAtual);
+
                     
                     if (operacao == null) {
                         double resultado = numero2 / 100;
@@ -153,7 +157,10 @@ public class Calculadora {
                     
                 }
                 }
-                else if(txtProx.equals("+/-")){
+                break;
+
+                case "+/-":
+                {
 
                     txtAtual = visor.getText();
 
@@ -164,7 +171,10 @@ public class Calculadora {
                     }
 
                 }
-                else if (txtProx.equals("=")) {
+                break;
+
+                case "=": 
+                
 
                         numero2 = Double.parseDouble(txtAtual);
                         double resultado = 0;
@@ -192,23 +202,22 @@ public class Calculadora {
                             formatarResultado(visor, resultado);
                         }
 
-                    } 
-                    //Verifica se o ponto já foi adicionado
-                else if(txtProx.equals(".")){
+                 
+                break;
 
-                        if(!txtAtual.contains(".")){
-                            visor.setText(txtAtual+txtProx);
-                        }
+                //Verifica se o ponto já foi adicionado
+                case ".":
+                    if (!txtAtual.contains(".")) {
+                        visor.setText(txtAtual + txtProx);
                     }
+                break;
 
-                else{
-
+                default:
                     visor.setText(txtAtual + txtProx);
-                }}
-            });
+                break;
+                } } }); 
 
-
-            painel.add(btn[i]);
+painel.add(btn[i]);
         }
 
    
