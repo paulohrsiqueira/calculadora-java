@@ -8,6 +8,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import java.awt.BorderLayout;
+import java.awt.Font;
+import java.awt.Color;
+import javax.swing.border.EmptyBorder;
+import java.awt.Dimension;
 
 public class Calculadora {
 
@@ -22,14 +26,22 @@ public class Calculadora {
         janela.setTitle("Calculadora");
         janela.setSize(400, 600);
         janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
+        janela.setLayout(new BorderLayout());
 
         JTextField visor = new JTextField();
 
+        visor.setFont(new Font("Arial", Font.PLAIN, 40));
+        visor.setHorizontalAlignment(JTextField.RIGHT);
+        visor.setBackground(Color.BLACK);
+        visor.setForeground(Color.WHITE);
+        visor.setBorder(null);
+        visor.setPreferredSize(new Dimension(0, 100));
+
         JPanel painel = new JPanel();
         
-        
-        painel.setLayout(new GridLayout(5, 4));
+        painel.setBackground(Color.BLACK);
+        painel.setLayout(new GridLayout(5, 4,8,8));
+        painel.setBorder(new EmptyBorder(8, 8, 8, 8));
 
         String[] txt = {
             "⌫","AC", "%", "÷",
@@ -39,10 +51,34 @@ public class Calculadora {
             "+/-","0", ".","="
         };
 
-        JButton[] btn = new JButton[20];
+        BotaoCalculadora[] btn = new BotaoCalculadora[20];
+
+        Color cinza = Color.decode("#505050");
+        Color laranja = Color.decode("#FF9500");
+        Color fundo = Color.decode("#1C1C1C");
 
         for (int i = 0; i < 20; i++) {
-            btn[i] = new JButton(txt[i]);
+            
+            btn[i] = new BotaoCalculadora();
+            btn[i].setText(txt[i]);
+
+            btn[i].setFont(new Font("Arial", Font.PLAIN, 25));
+            btn[i].setCorOriginal(fundo);
+            btn[i].setForeground(Color.WHITE);
+            btn[i].setFocusPainted(false);
+            btn[i].setBorderPainted(false);
+            
+
+            if (txt[i].equals("⌫")) {
+                btn[i].setFont(new Font("Segoe UI Symbol", Font.PLAIN, 25));
+                btn[i].setCorOriginal(cinza);
+            }
+            else if (txt[i].equals("AC")||txt[i].equals("%")){
+                btn[i].setCorOriginal(cinza);
+            }
+            else if (txt[i].equals("+") || txt[i].equals("-") || txt[i].equals("×") || txt[i].equals("÷") || txt[i].equals("=")) {
+                btn[i].setCorOriginal(laranja);
+            }
 
             btn[i].addActionListener(new ActionListener() {
                 @Override
