@@ -92,22 +92,25 @@ public class Calculadora {
 
                 //Backspace
                 switch (txtProx){
+
                 case "⌫": 
-                    {
-                        if (txtAtual.length() > 0) {
+                        if (txtAtual.equals("ERROR")) {
+                            visor.setText("");
+                        } 
+                        else if (txtAtual.length() > 0) {
                             visor.setText(txtAtual.substring(0, txtAtual.length() - 1));
                         }
-                    }
-                    break;
+                    
+                break;
 
                 //Limpa
                 case "AC":
-                    {
+                    
                         visor.setText("");
                         numero1 = 0;
                         numero2 = 0;
                         operacao = null;
-                    }
+                    
                     break;
 
 
@@ -116,13 +119,20 @@ public class Calculadora {
                 case "-":
                 case "×":
                 case "÷":
-
+                    if (txtAtual.equals("ERROR")) {
+                        visor.setText("");
+                        break;
+                    }   
                     if (txtAtual.isEmpty()) {
                         if(txtProx.equals("-")){
                             visor.setText("-");}
-                    }else if(txtAtual.equals("-")) {
-                        break;
-                    }else {
+                    } else if(txtAtual.equals("-")) {
+                        break; 
+                    } else { 
+
+                        if(txtAtual.equals(".")){
+                        txtAtual = "0.";}
+                        
                         numero1 = Double.parseDouble(txtAtual);
                         operacao = txtProx;
                         visor.setText("");
@@ -130,7 +140,13 @@ public class Calculadora {
                 break;
 
                 case "%":
-                        numero2 = Double.parseDouble(txtAtual);
+
+                    if (txtAtual.isEmpty() || txtAtual.equals("ERROR")) {
+                        visor.setText("");
+                        break;
+                    }
+
+                    numero2 = Double.parseDouble(txtAtual);
 
                     if (operacao == null) {
                         double resultado = numero2 / 100;
@@ -147,22 +163,33 @@ public class Calculadora {
                 break;
 
                 case "+/-":
-                {
 
                     txtAtual = visor.getText();
 
-                    if (!txtAtual.isEmpty()) {
+                    if(txtAtual.equals("ERROR")){
+                        break;
+                    } else if (txtAtual.isEmpty()) {
+                        visor.setText("-");
+                    } else if (txtAtual.equals("-")) {
+                        visor.setText("");
+                    } else if (txtAtual.equals(".")) {
+                        visor.setText("-.");
+                    } else if (txtAtual.equals("-.")) {
+                        visor.setText(".");
+                    } else {
                         double numero = Double.parseDouble(txtAtual);
                         numero = numero * -1;
                         formatarResultado(visor, numero);
                     }
 
-                }
+                
                 break;
 
                 case "=": 
-
-                        if (txtAtual.isEmpty() || operacao == null) {
+                        if(txtAtual.equals("ERROR")){
+                        break;
+                        }
+                        if (txtAtual.isEmpty() || operacao == null || txtAtual.equals("-") || txtAtual.equals(".") || txtAtual.equals("-.")) {
                         break;
                         }
 
@@ -203,16 +230,23 @@ public class Calculadora {
                  
                 break;
 
-                //Verifica se o ponto já foi adicionado
+                //Verifica o ponto 
                 case ".":
-                    if (!txtAtual.contains(".")) {
-                        visor.setText(txtAtual + txtProx);
-                    }
+                if (txtAtual.equals("ERROR")) {
+                    visor.setText(txtProx);
+                    break;
+                } else if (!txtAtual.contains(".")) {
+                    visor.setText(txtAtual + txtProx);
+                } 
                 break;
 
                 default:
-                    visor.setText(txtAtual + txtProx);
-                break;
+                    if (txtAtual.equals("ERROR")) {
+                        visor.setText(txtProx);
+                    } else {
+                        visor.setText(txtAtual + txtProx);
+                    }
+                    break;
                 } } }); 
 
 painel.add(btn[i]);
@@ -224,6 +258,8 @@ painel.add(btn[i]);
 
         janela.setVisible(true);
     }
+
+
     static void formatarResultado(JTextField visor, double resultado) {
         if (resultado == (int) resultado) {
             visor.setText(String.valueOf((int) resultado));
