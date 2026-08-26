@@ -127,36 +127,20 @@ public class Calculadora {
                 break;
 
                 case "%":
-                    {
                         numero2 = Double.parseDouble(txtAtual);
 
-                    
                     if (operacao == null) {
                         double resultado = numero2 / 100;
                         formatarResultado(visor, resultado);
-                    } else {
-                       double porcentagem = numero1 * numero2 / 100;
-                    
-                      if(operacao.equals("+")){
-                      double resultado = numero1 + porcentagem;
-                      formatarResultado(visor, resultado);
-                    } else if (operacao.equals("-")) {
-                        double resultado = numero1 - porcentagem;
-                        formatarResultado(visor, resultado);
-                    } else if (operacao.equals("×")) {
-                        double resultado = numero1 * (numero2 / 100);
-                        formatarResultado(visor, resultado);
-                    } else if (operacao.equals("÷")){
-                        if (numero2 == 0) {
-                                visor.setText("ERROR");
-                            } else {
-                                double resultado = numero1 / (numero2 / 100);
-                                formatarResultado(visor, resultado);
-                            }
                         }
-                    
-                }
-                }
+                    else { 
+                        double resultado = calcPorcentagem(numero1, numero2, operacao);
+
+                        if (Double.isNaN(resultado)) {
+                            visor.setText("ERROR");
+                        } else {
+                            formatarResultado(visor, resultado);
+                        }}
                 break;
 
                 case "+/-":
@@ -233,4 +217,35 @@ painel.add(btn[i]);
             visor.setText(String.valueOf(resultado));
         }
     }
+
+    static double calcPorcentagem(double numero1, double numero2, String operacao){
+            
+        if(operacao.equals("+")){
+
+            double porcentagem = numero1 * numero2 / 100;
+            double resultado = numero1 + porcentagem;
+            return resultado;
+                      
+        } else if (operacao.equals("-")) {
+            double porcentagem = numero1 * numero2 / 100;
+            double resultado = numero1 - porcentagem;
+            return resultado;
+
+        } else if (operacao.equals("×")) {
+            double resultado = numero1 * (numero2 / 100);
+            return resultado; 
+
+        } else if (operacao.equals("÷")){
+            if (numero2 == 0) {
+                return Double.NaN;
+            } else {
+                double resultado = numero1 / (numero2 / 100);
+                return resultado;
+                }
+            
+        } else {
+         return Double.NaN;
+        }
+    }
+    
 }
