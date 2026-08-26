@@ -117,9 +117,12 @@ public class Calculadora {
                 case "×":
                 case "÷":
 
-                    if (txtProx.equals("-") && txtAtual.isEmpty()) {
-                        visor.setText("-");
-                    } else {
+                    if (txtAtual.isEmpty()) {
+                        if(txtProx.equals("-")){
+                            visor.setText("-");}
+                    }else if(txtAtual.equals("-")) {
+                        break;
+                    }else {
                         numero1 = Double.parseDouble(txtAtual);
                         operacao = txtProx;
                         visor.setText("");
@@ -158,28 +161,39 @@ public class Calculadora {
                 break;
 
                 case "=": 
-                
+
+                        if (txtAtual.isEmpty() || operacao == null) {
+                        break;
+                        }
 
                         numero2 = Double.parseDouble(txtAtual);
                         double resultado = 0;
                         boolean erro = false;
 
+                        // Calcula o resultado
+                        switch (operacao) {
+                            case "+":
+                                resultado = numero1 + numero2;
+                                break;
 
-                    //Calcula o resultado
-                if (operacao.equals("+")) {
-                            resultado = numero1 + numero2;
-                        } else if (operacao.equals("-")) {
-                            resultado = numero1 - numero2;
-                        } else if (operacao.equals("×")) {
-                            resultado = numero1 * numero2;
-                        } else if (operacao.equals("÷")) {
-                            if(numero2 == 0){
-                                erro = true;
-                            }else{
-                            resultado = numero1 / numero2;}
+                            case "-":
+                                resultado = numero1 - numero2;
+                                break;
+
+                            case "×":
+                                resultado = numero1 * numero2;
+                                break;
+
+                            case "÷":
+                                if (numero2 == 0) {
+                                    erro = true;
+                                } else {
+                                    resultado = numero1 / numero2;
+                                }
+                                break;
                         }
 
-                    //Formata o resultado
+                    //Formata o resultado 
                     if (erro) {
                         visor.setText("ERROR");
                         } else {
