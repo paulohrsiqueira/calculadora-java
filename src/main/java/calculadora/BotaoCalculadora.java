@@ -12,7 +12,9 @@ public class BotaoCalculadora extends JButton {
 
     private Color corOriginal;
 
-    public BotaoCalculadora() {
+    public BotaoCalculadora(String texto) {
+
+        setText(texto);
         
         setContentAreaFilled(false);
         setBorderPainted(false);

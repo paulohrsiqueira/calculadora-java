@@ -12,6 +12,16 @@ import java.awt.Font;
 import java.awt.Color;
 import javax.swing.border.EmptyBorder;
 import java.awt.Dimension;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import javax.swing.AbstractAction;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
+import java.util.Map;
+import java.util.HashMap;
+
+
+
 
 public class Calculadora {
 
@@ -36,6 +46,8 @@ public class Calculadora {
         visor.setForeground(Color.WHITE);
         visor.setBorder(null);
         visor.setPreferredSize(new Dimension(0, 100));
+        visor.setEditable(false);
+        visor.setFocusable(false);
 
         JPanel painel = new JPanel();
         
@@ -43,7 +55,7 @@ public class Calculadora {
         painel.setLayout(new GridLayout(5, 4,8,8));
         painel.setBorder(new EmptyBorder(8, 8, 8, 8));
 
-        String[] txt = {
+        String[] txtBotoes = {
             "⌫","AC", "%", "÷",
             "7", "8", "9", "×",
             "4", "5", "6", "-",
@@ -51,37 +63,42 @@ public class Calculadora {
             "+/-","0", ".","="
         };
 
-        BotaoCalculadora[] btn = new BotaoCalculadora[20];
+        Map<String, BotaoCalculadora> btnMap = new HashMap<>();
 
         Color cinza = Color.decode("#505050");
         Color laranja = Color.decode("#FF9500");
         Color fundo = Color.decode("#1C1C1C");
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < txtBotoes.length; i++) {
+
+        BotaoCalculadora btn = new BotaoCalculadora(txtBotoes[i]);
+
+        btnMap.put(txtBotoes[i], btn);
+
+        btn.setFont(new Font("Arial", Font.PLAIN, 25));
+        btn.setCorOriginal(fundo);
+        btn.setForeground(Color.WHITE);
+        btn.setFocusPainted(false);
+        btn.setBorderPainted(false);
             
-            btn[i] = new BotaoCalculadora();
-            btn[i].setText(txt[i]);
 
-            btn[i].setFont(new Font("Arial", Font.PLAIN, 25));
-            btn[i].setCorOriginal(fundo);
-            btn[i].setForeground(Color.WHITE);
-            btn[i].setFocusPainted(false);
-            btn[i].setBorderPainted(false);
+            if (txtBotoes[i].equals("⌫")) {
+                btn.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 25));
+                btn.setCorOriginal(cinza);
+            }
+            else if (txtBotoes[i].equals("AC")||txtBotoes[i].equals("%")){
+                btn.setCorOriginal(cinza);
+            }
+            else if (txtBotoes[i].equals("+") 
+                || txtBotoes[i].equals("-") 
+                || txtBotoes[i].equals("×") 
+                || txtBotoes[i].equals("÷") 
+                || txtBotoes[i].equals("=")) {
+                btn.setCorOriginal(laranja);
+            }
             
-
-            if (txt[i].equals("⌫")) {
-                btn[i].setFont(new Font("Segoe UI Symbol", Font.PLAIN, 25));
-                btn[i].setCorOriginal(cinza);
-            }
-            else if (txt[i].equals("AC")||txt[i].equals("%")){
-                btn[i].setCorOriginal(cinza);
-            }
-            else if (txt[i].equals("+") || txt[i].equals("-") || txt[i].equals("×") || txt[i].equals("÷") || txt[i].equals("=")) {
-                btn[i].setCorOriginal(laranja);
-            }
-
-            btn[i].addActionListener(new ActionListener() {
-
+            btn.addActionListener(new ActionListener() {
+            
                 @Override
                 public void actionPerformed(ActionEvent e ){
                     JButton btnClicado = (JButton) e.getSource();
@@ -247,14 +264,76 @@ public class Calculadora {
                         visor.setText(txtAtual + txtProx);
                     }
                     break;
-                } } }); 
-
-painel.add(btn[i]);
+                } } });
+                        
+painel.add(btn);
         }
 
    
         janela.add(visor, BorderLayout.NORTH);
         janela.add(painel, BorderLayout.CENTER);
+
+
+    //Numeros teclado e NumPad
+            for (int numero = 0; numero <= 9; numero++) {
+
+            final int numeroAtual = numero;
+
+            adicionarAtalho(
+                janela,
+                btnMap,
+                KeyStroke.getKeyStroke(String.valueOf(numero)),
+                KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD0 + numero, 0),
+                "pressionarNumero" + numero,
+                String.valueOf(numeroAtual)
+            );
+        }
+    
+
+    //Enter teclado e Numpad 
+            adicionarAtalho(janela, btnMap,
+                 KeyStroke.getKeyStroke("ENTER"),
+                 null, 
+                 "pressionarEnter", 
+                 "=");
+    
+    //Backspace teclado
+            adicionarAtalho(janela, btnMap,
+                 KeyStroke.getKeyStroke("BACK_SPACE"),
+                 null, 
+                 "pressionarBackspace", 
+                 "⌫");
+    
+    //Operadores teclado e Numpad
+            adicionarAtalho(janela, btnMap,
+                    KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, KeyEvent.SHIFT_DOWN_MASK),
+                    KeyStroke.getKeyStroke(KeyEvent.VK_ADD, 0),
+                    "pressionarMais",
+                    "+"
+                );
+
+
+                adicionarAtalho(janela, btnMap,
+                    KeyStroke.getKeyStroke(KeyEvent.VK_MINUS,0),
+                    KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, 0),
+                    "pressionarMenos",
+                    "-"
+                );
+
+
+                adicionarAtalho(janela, btnMap,
+                    KeyStroke.getKeyStroke(KeyEvent.VK_8, KeyEvent.SHIFT_DOWN_MASK),
+                    KeyStroke.getKeyStroke(KeyEvent.VK_MULTIPLY, 0),
+                    "pressionarMultiplicacao",
+                    "×"
+                );
+
+                adicionarAtalho(janela, btnMap,
+                    KeyStroke.getKeyStroke(KeyEvent.VK_SLASH, 0),
+                    KeyStroke.getKeyStroke(KeyEvent.VK_DIVIDE, 0),
+                    "pressionarDivisao",
+                    "÷"
+                );
 
         janela.setVisible(true);
     }
@@ -296,6 +375,32 @@ painel.add(btn[i]);
         } else {
          return Double.NaN;
         }
+    }
+
+    static void adicionarAtalho(
+        JFrame janela,
+        Map<String, BotaoCalculadora> btnMap,
+        KeyStroke tecla1,
+        KeyStroke tecla2,
+        String nomeAcao,
+        String botao) {
+
+    janela.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+        .put(tecla1, nomeAcao);
+
+    if (tecla2 != null) {
+        janela.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+            .put(tecla2, nomeAcao);
+    }
+
+
+    janela.getRootPane().getActionMap()
+        .put(nomeAcao, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btnMap.get(botao).doClick();
+            }
+        });
     }
     
 }
